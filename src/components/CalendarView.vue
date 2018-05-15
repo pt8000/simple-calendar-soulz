@@ -523,10 +523,12 @@ export default {
 				const dayStartTime = new Date(ep.startDate.getTime()).setHours(6,0,0,0) //copy start date and set day start to 6:00
 				const eventStartQuarter = Math.round((ep.startDate - dayStartTime) / 1000 / 60 / 15, 0) //in which quarter from 6:00 starts event
 				const eventTimeQuarter = Math.round((ep.endDate - ep.startDate) / 1000 / 60 / 15, 0)
+				const bigger2 = (eventStartQuarter <= 20) ? 7 : eventStartQuarter
 
 				ep.eventRow = eventStartQuarter
 
-				const eventHeight = `calc((${eventTimeQuarter} * 1.45em) + ${eventTimeQuarter} * 1px);`
+				const eventHeight = `calc((${eventTimeQuarter} * 1.45em) + ${eventTimeQuarter} * 1px);`				
+				const eventPositionTop = `calc((${eventStartQuarter} * 1.4em) + (${eventStartQuarter} * 2px) - (${bigger2}px / 7));`
 
 				// for (let d = 0; d < 7; d++) {
 					// if (d === startOffset) {
@@ -544,8 +546,8 @@ export default {
 
 				ep.classes.push(`offset${startOffset}`)
 				ep.classes.push(`span${span}`)
-				ep.classes.push(`eventRow${ep.eventRow}`)
-				ep.style = `height: ${eventHeight}`
+				//ep.classes.push(`eventRow${ep.eventRow}`) //we don't use static row position classes
+				ep.style = `height: ${eventHeight} top: ${eventPositionTop}` //top position will be in style property evaluated
 
 				results.push(ep)
 			}
@@ -594,7 +596,7 @@ export default {
 	},
 	mounted() {
 		let currentTimeLine = document.getElementById("currentTimeLine")
-		currentTimeLine.scrollIntoView({behavior: "auto", block: "center"}) //behavior: smooth dont work, dauert too long
+		currentTimeLine.scrollIntoView({behavior: "auto", block: "center"}) //behavior: smooth dont work, last too long
 	}
 }
 </script>
@@ -1030,6 +1032,10 @@ and decorations like border-radius should be part of a theme.
 
 .calendar-view .event.eventRow20 {
 	top: calc(20 * 1.4em + 38px);
+}
+
+.calendar-view .event.eventRow45 {
+	top: calc(45 * 1.4em + 88px);
 }
 
 /* .calendar-view .event.eventRow0 {
